@@ -228,18 +228,28 @@ list_ele_t *merge_list(list_ele_t *node)
 
 list_ele_t *merge_sort(list_ele_t *l, list_ele_t *r)
 {
-    if (!l) {
-        return r;
-    }
-    if (!r) {
-        return l;
+    list_ele_t tmp;
+    list_ele_t *node = &tmp;
+
+    tmp.next = NULL;
+
+    while (l && r) {
+        if (strcmp(l->value, r->value) < 0) {
+            node->next = l;
+            node = node->next;
+            l = l->next;
+        } else {
+            node->next = r;
+            node = node->next;
+            r = r->next;
+        }
     }
 
-    if (strcmp(l->value, r->value) <= 0) {
-        l->next = merge_sort(l->next, r);
-        return l;
+    if (l) {
+        node->next = l;
     } else {
-        r->next = merge_sort(l, r->next);
-        return r;
+        node->next = r;
     }
+
+    return tmp.next;
 }
